@@ -3,70 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>共享音乐空间</title>
+    <title>音乐空间</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
         }
 
-        /* ✅ 这里就是背景图片（可自己换） */
         body {
             min-height: 100vh;
-            background-image: url("https://img.ixiaocai.cn/upload/image/202405/18/17160288655108.jpg");
+            /* 👇 这就是你上传的那张背景图！ */
+            background-image: url("https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/723cdb500c734b2c9c876badb29af3b6.png");
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
         }
 
         .music-player {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-radius: 20px;
-            padding: 40px 30px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: 22px;
+            padding: 45px 35px;
             width: 90%;
             max-width: 500px;
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
             text-align: center;
             color: white;
-            z-index: 10;
         }
 
         h1 {
             font-size: 28px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             text-shadow: 0 0 10px rgba(255,255,255,0.5);
         }
 
         #song-name {
             font-size: 20px;
-            margin: 15px 0;
-            min-height: 30px;
+            margin: 18px 0;
+            font-weight: bold;
         }
 
         #lyrics {
             height: 60px;
-            margin: 20px 0;
             font-size: 16px;
-            line-height: 30px;
             color: rgba(255,255,255,0.9);
-            text-shadow: 0 0 8px rgba(255,255,255,0.4);
-            overflow: hidden;
+            margin: 20px 0;
+            line-height: 1.5;
         }
 
         .controls {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin: 30px 0;
+            gap: 22px;
+            margin-top: 30px;
         }
 
         button {
@@ -74,12 +70,11 @@
             height: 60px;
             border-radius: 50%;
             border: none;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.25);
             color: white;
             font-size: 24px;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 0 15px rgba(255,255,255,0.2);
+            transition: 0.3s;
         }
 
         button:hover {
@@ -88,11 +83,12 @@
         }
     </style>
 </head>
+
 <body>
     <div class="music-player">
-        <h1>🎵 共享音乐空间</h1>
-        <div id="song-name">正在加载...</div>
-        <div id="lyrics">欢迎来到我的音乐世界 ✨</div>
+        <h1>🎵 我的音乐空间</h1>
+        <div id="song-name">加载中...</div>
+        <div id="lyrics">欢迎聆听</div>
 
         <div class="controls">
             <button id="prev">⏮️</button>
@@ -123,7 +119,6 @@
             audio.src = song.url;
             songName.innerText = song.name;
             lyrics.innerText = song.lyrics;
-            audio.load();
         }
 
         function togglePlay() {
@@ -152,16 +147,14 @@
 
         audio.addEventListener('ended', nextSong);
         playBtn.addEventListener('click', togglePlay);
-        document.getElementById('prev').addEventListener('click', prevSong);
-        document.getElementById('next').addEventListener('click', nextSong);
+        document.getElementById('prev').onclick = prevSong;
+        document.getElementById('next').onclick = nextSong;
 
         window.addEventListener('DOMContentLoaded', () => {
-            loadSong(currentIndex);
+            loadSong(0);
             setTimeout(() => {
-                audio.play().then(() => {
-                    playBtn.innerText = "⏸️";
-                }).catch(err => {});
-            }, 500);
+                audio.play().then(() => playBtn.innerText = "⏸️");
+            }, 600);
         });
     </script>
 </body>
