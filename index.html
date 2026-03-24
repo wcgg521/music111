@@ -14,11 +14,12 @@
 
         body {
             min-height: 100vh;
-            /* 👇 这就是你上传的那张背景图！ */
-            background-image: url("https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/723cdb500c734b2c9c876badb29af3b6.png");
+            background-image: url("https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/723cdb500c734b2c9c876badb29af3b6.png");
             background-size: cover;
             background-position: center;
+            background-repeat: no-repeat;
             background-attachment: fixed;
+            background-color: #000 !important;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -153,7 +154,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             loadSong(0);
             setTimeout(() => {
-                audio.play().then(() => playBtn.innerText = "⏸️");
+                audio.play().then(() => playBtn.innerText = "⏸️").catch(()=>{});
             }, 600);
         });
     </script>
