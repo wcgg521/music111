@@ -3,67 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>音乐空间</title>
+    <title>共享音乐空间</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        /* 动态渐变背景 - 超酷炫动效 */
         body {
             min-height: 100vh;
-            background-image: url("https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/723cdb500c734b2c9c876badb29af3b6.png");
+            background-image: url("https://raw.githubusercontent.com/wcgg521/my-music/main/4GZS.png");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             background-attachment: fixed;
-            background-color: #000 !important;
+            background-color: #000;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        .music-player {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border-radius: 22px;
-            padding: 45px 35px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.2);
-            text-align: center;
-            color: white;
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
+        /* 主容器 玻璃拟态效果 */
+        .music-player {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 40px 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            color: white;
+            z-index: 10;
+        }
+
+        /* 标题 */
         h1 {
             font-size: 28px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             text-shadow: 0 0 10px rgba(255,255,255,0.5);
         }
 
+        /* 歌曲名 */
         #song-name {
             font-size: 20px;
-            margin: 18px 0;
-            font-weight: bold;
+            margin: 15px 0;
+            min-height: 30px;
         }
 
+        /* 悬浮歌词 */
         #lyrics {
             height: 60px;
-            font-size: 16px;
-            color: rgba(255,255,255,0.9);
             margin: 20px 0;
-            line-height: 1.5;
+            font-size: 16px;
+            line-height: 30px;
+            color: rgba(255,255,255,0.9);
+            text-shadow: 0 0 8px rgba(255,255,255,0.4);
+            overflow: hidden;
         }
 
+        /* 按钮 */
         .controls {
             display: flex;
             justify-content: center;
-            gap: 22px;
-            margin-top: 30px;
+            gap: 20px;
+            margin: 30px 0;
         }
 
         button {
@@ -71,11 +86,12 @@
             height: 60px;
             border-radius: 50%;
             border: none;
-            background: rgba(255,255,255,0.25);
+            background: rgba(255,255,255,0.2);
             color: white;
             font-size: 24px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(255,255,255,0.2);
         }
 
         button:hover {
@@ -84,12 +100,11 @@
         }
     </style>
 </head>
-
 <body>
     <div class="music-player">
-        <h1>🎵 我的音乐空间</h1>
-        <div id="song-name">加载中...</div>
-        <div id="lyrics">欢迎聆听</div>
+        <h1>🎵 共享音乐空间</h1>
+        <div id="song-name">正在加载...</div>
+        <div id="lyrics">欢迎来到我的音乐世界 ✨</div>
 
         <div class="controls">
             <button id="prev">⏮️</button>
@@ -101,13 +116,20 @@
     <audio id="audio"></audio>
 
     <script>
+        // ====================== 你的歌曲列表 ======================
         const musicList = [
             {
-                name: "Tokyo Hot",
+                name: "TYO_Hot",
                 url: "https://github.com/wcgg521/my-music/raw/refs/heads/main/Tokyo_Hot-Z3BROTHER.mp3",
-                lyrics: "同 | 意 | 哦 ~"
+                lyrics: "同 | 意 | 哦 "
+            },
+            {
+                name: "纯音乐",
+                url: "https://lz.qaiu.top/parser?url=https://share.weiyun.com/M0exLHOm",
+                lyrics: "静心聆听 | 属于你的治愈时刻"
             }
         ];
+        // ==========================================================
 
         let currentIndex = 0;
         const audio = document.getElementById('audio');
@@ -115,13 +137,16 @@
         const songName = document.getElementById('song-name');
         const lyrics = document.getElementById('lyrics');
 
+        // 加载歌曲
         function loadSong(index) {
             const song = musicList[index];
             audio.src = song.url;
             songName.innerText = song.name;
             lyrics.innerText = song.lyrics;
+            audio.load();
         }
 
+        // 播放/暂停
         function togglePlay() {
             if (audio.paused) {
                 audio.play();
@@ -132,6 +157,7 @@
             }
         }
 
+        // 上一首
         function prevSong() {
             currentIndex = (currentIndex - 1 + musicList.length) % musicList.length;
             loadSong(currentIndex);
@@ -139,6 +165,7 @@
             playBtn.innerText = "⏸️";
         }
 
+        // 下一首
         function nextSong() {
             currentIndex = (currentIndex + 1) % musicList.length;
             loadSong(currentIndex);
@@ -146,16 +173,22 @@
             playBtn.innerText = "⏸️";
         }
 
+        // 自动播放下一首
         audio.addEventListener('ended', nextSong);
-        playBtn.addEventListener('click', togglePlay);
-        document.getElementById('prev').onclick = prevSong;
-        document.getElementById('next').onclick = nextSong;
 
+        // 绑定按钮
+        playBtn.addEventListener('click', togglePlay);
+        document.getElementById('prev').addEventListener('click', prevSong);
+        document.getElementById('next').addEventListener('click', nextSong);
+
+        // 初始加载 + 🔥 自动播放
+        loadSong(currentIndex);
         window.addEventListener('DOMContentLoaded', () => {
-            loadSong(0);
             setTimeout(() => {
-                audio.play().then(() => playBtn.innerText = "⏸️").catch(()=>{});
-            }, 600);
+                audio.play().then(() => {
+                    playBtn.innerText = "⏸️";
+                }).catch(err => {});
+            }, 500);
         });
     </script>
 </body>
